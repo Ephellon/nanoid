@@ -2,14 +2,14 @@
 
 ```
 NAME
-    C:\Users\ephel\Development\Work\AutoIATE\nanoid.ps1
+    nanoid.ps1
 
 SYNOPSIS
     A tiny, secure, URL-friendly, unique string ID generator.
 
 
 SYNTAX
-    C:\Users\ephel\Development\Work\AutoIATE\nanoid.ps1 [[-size] <Int32>] [[-alphabet] <String>] [[-dict] <String>] [-NUMBERS] [-HEXADECIMAL_LOWERCASE] [-HEXADECIMAL_UPPERCASE] [-LOWERCASE] [-LOWERCASE_SAFE]
+    nanoid.ps1 [[-size] <Int32>] [[-alphabet] <String>] [[-dict] <String>] [-NUMBERS] [-HEXADECIMAL_LOWERCASE] [-HEXADECIMAL_UPPERCASE] [-LOWERCASE] [-LOWERCASE_SAFE]
     [-UPPERCASE] [-UPPERCASE_SAFE] [-ALPHANUMERIC] [-ALPHANUMERIC_SAFE] [-NO_LOOK_ALIKES] [-NO_LOOK_ALIKES_SAFE] [-BASE64] [<CommonParameters>]
 
 
