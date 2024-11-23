@@ -1,454 +1,258 @@
-# Nano ID
+# NanoID generator, library and CLI
 
-<img src="https://ai.github.io/nanoid/logo.svg" align="right"
-     alt="Nano ID logo by Anton Lovchikov" width="180" height="94">
-
-**English** | [Русский](./README.ru.md) | [简体中文](./README.zh-CN.md) | [Bahasa Indonesia](./README.id-ID.md)
-
-A tiny, secure, URL-friendly, unique string ID generator for JavaScript.
-
-> “An amazing level of senseless perfectionism,
-> which is simply impossible not to respect.”
-
-* **Small.** 116 bytes (minified and brotlied). No dependencies.
-  [Size Limit] controls the size.
-* **Safe.** It uses hardware random generator. Can be used in clusters.
-* **Short IDs.** It uses a larger alphabet than UUID (`A-Za-z0-9_-`).
-  So ID size was reduced from 36 to 21 symbols.
-* **Portable.** Nano ID was ported
-  to over [20 programming languages](./README.md#other-programming-languages).
-
-```js
-import { nanoid } from 'nanoid'
-model.id = nanoid() //=> "V1StGXR8_Z5jdHi6B-myT"
 ```
+NAME
+    C:\Users\ephel\Development\Work\AutoIATE\nanoid.ps1
 
----
-
-<img src="https://cdn.evilmartians.com/badges/logo-no-label.svg" alt="" width="22" height="16" />  Made at <b><a href="https://evilmartians.com/devtools?utm_source=nanoid&utm_campaign=devtools-button&utm_medium=github">Evil Martians</a></b>, product consulting for <b>developer tools</b>.
-
----
-
-[online tool]: https://gitpod.io/#https://github.com/ai/nanoid/
-[with Babel]:  https://developer.epages.com/blog/coding/how-to-transpile-node-modules-with-babel-and-webpack-in-a-monorepo/
-[Size Limit]:  https://github.com/ai/size-limit
+SYNOPSIS
+    A tiny, secure, URL-friendly, unique string ID generator.
 
 
-## Table of Contents
-
-- [Table of Contents](#table-of-contents)
-- [Comparison with UUID](#comparison-with-uuid)
-- [Benchmark](#benchmark)
-- [Security](#security)
-- [Install](#install)
-- [API](#api)
-  - [Blocking](#blocking)
-  - [Non-Secure](#non-secure)
-  - [Custom Alphabet or Size](#custom-alphabet-or-size)
-  - [Custom Random Bytes Generator](#custom-random-bytes-generator)
-- [Usage](#usage)
-  - [React](#react)
-  - [React Native](#react-native)
-  - [PouchDB and CouchDB](#pouchdb-and-couchdb)
-  - [Web Workers](#web-workers)
-  - [CLI](#cli)
-  - [Other Programming Languages](#other-programming-languages)
-- [Tools](#tools)
+SYNTAX
+    C:\Users\ephel\Development\Work\AutoIATE\nanoid.ps1 [[-size] <Int32>] [[-alphabet] <String>] [[-dict] <String>] [-NUMBERS] [-HEXADECIMAL_LOWERCASE] [-HEXADECIMAL_UPPERCASE] [-LOWERCASE] [-LOWERCASE_SAFE]
+    [-UPPERCASE] [-UPPERCASE_SAFE] [-ALPHANUMERIC] [-ALPHANUMERIC_SAFE] [-NO_LOOK_ALIKES] [-NO_LOOK_ALIKES_SAFE] [-BASE64] [<CommonParameters>]
 
 
-## Comparison with UUID
-
-Nano ID is quite comparable to UUID v4 (random-based).
-It has a similar number of random bits in the ID
-(126 in Nano ID and 122 in UUID), so it has a similar collision probability:
-
-> For there to be a one in a billion chance of duplication,
-> 103 trillion version 4 IDs must be generated.
-
-There are two main differences between Nano ID and UUID v4:
-
-1. Nano ID uses a bigger alphabet, so a similar number of random bits
-   are packed in just 21 symbols instead of 36.
-2. Nano ID code is **4 times smaller** than `uuid/v4` package:
-   130 bytes instead of 423.
+DESCRIPTION
+    NanoID generates an ID string that is comparable to UUID v4 (random-based). It has a similar number of random bits in the ID (126 in NanoID and 122 in UUID).
 
 
-## Benchmark
+PARAMETERS
+    -size <Int32>
+        Defines the returning string's size in bytes (characters).
+        This parameter is optional.
 
-```rust
-$ node ./test/benchmark.js
-crypto.randomUUID          7,619,041 ops/sec
-uuid v4                    7,436,626 ops/sec
-@napi-rs/uuid              4,730,614 ops/sec
-uid/secure                 4,729,185 ops/sec
-@lukeed/uuid               4,015,673 ops/sec
-nanoid                     3,693,964 ops/sec
-customAlphabet             2,799,255 ops/sec
-nanoid for browser           380,915 ops/sec
-secure-random-string         362,316 ops/sec
-uid-safe.sync                354,234 ops/sec
-shortid                       38,808 ops/sec
+        Required?                    false
+        Position?                    1
+        Default value                21
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
 
-Non-secure:
-uid                       11,872,105 ops/sec
-nanoid/non-secure          2,226,483 ops/sec
-rndm                       2,308,044 ops/sec
+    -alphabet <String>
+        Defines the characters that can be used in the returning string.
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    2
+        Default value                useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -dict <String>
+        Takes a character-set name that is easier to type and/or remember.
+        Uses the corresponding character-set (if found).
+        This parameter is optional.
+
+        Can be one of:
+            "NUMS"          See -NUMBERS
+            "HEX_LOWER"     See -HEXADECIMAL_LOWERCASE
+            "HEX_UPPER"     See -HEXADECIMAL_UPPERCASE
+            "LOWER"         See -LOWERCASE
+            "LOWER_SAFE"    See -LOWERCASE_SAFE
+            "UPPER"         See -UPPERCASE
+            "UPPER_SAFE"    See -UPPERCASE_SAFE
+            "A2Z"           See -ALPHANUMERIC
+            "A2Z_SAFE"      See -ALPHANUMERIC_SAFE
+            "UNIQUE"        See -NO_LOOK_ALIKES
+            "UNIQUE_SAFE"   See -NO_LOOK_ALIKES_SAFE
+            "B64"           See -BASE64
+
+        Required?                    false
+        Position?                    3
+        Default value                default
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -NUMBERS [<SwitchParameter>]
+        Uses the NUMBERS character-set (`0123456789`) for the returning string.
+        Will use the numbers from 0 to 9.
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -HEXADECIMAL_LOWERCASE [<SwitchParameter>]
+        Uses the HEXADECIMAL_LOWERCASE character-set (`0123456789abcdef`) for the returning string.
+        Will use English hexadecimal characters, all lowercase.
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -HEXADECIMAL_UPPERCASE [<SwitchParameter>]
+        Uses the HEXADECIMAL_UPPERCASE character-set (`0123456789ABCDEF`) for the returning string.
+        Will use English hexadecimal characters, all uppercase.
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -LOWERCASE [<SwitchParameter>]
+        Uses the LOWERCASE character-set (`abcdefghijklmnopqrstuvwxyz`) for the returning string.
+        Will use English letters, all lowercase.
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -LOWERCASE_SAFE [<SwitchParameter>]
+        Uses the LOWERCASE_SAFE character-set (`bcdfghjklmnpqrstvwxz`) for the returning string.
+        Will use English letters (without vowels, to prevent profanity), all lowercase.
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -UPPERCASE [<SwitchParameter>]
+        Uses the UPPERCASE character-set (`ABCDEFGHIJKLMNOPQRSTUVWXYZ`) for the returning string.
+        Will use English letters, all uppercase.
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -UPPERCASE_SAFE [<SwitchParameter>]
+        Uses the UPPERCASE_SAFE character-set (`BCDFGHJKLMNPQRSTVWXZ`) for the returning string.
+        Will use English letters (without vowels, to prevent profanity), all uppercase.
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -ALPHANUMERIC [<SwitchParameter>]
+        Uses the ALPHANUMERIC character-set (`0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`) for the returning string.
+        Will use a mix of all English letters, and numbers.
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -ALPHANUMERIC_SAFE [<SwitchParameter>]
+        Uses the ALPHANUMERIC_SAFE character-set (`2456789bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ`) for the returning string.
+        Will use a mix of English letters (without vowels, to prevent profanity), and numbers.
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -NO_LOOK_ALIKES [<SwitchParameter>]
+        Uses the NO_LOOK_ALIKES character-set (`346789ABCDEFGHJKLMNPQRTUVWXYabcdefghijkmnpqrtwxyz`) for the returning string.
+        Will use a limited set of English letters, and numbers. Any easily-mistakable characters are removed (e.g. `0Oo`).
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -NO_LOOK_ALIKES_SAFE [<SwitchParameter>]
+        Uses the NO_LOOK_ALIKES_SAFE character-set (`6789BCDFGHJKLMNPQRTWbcdfghjkmnpqrtwz`) for the returning string.
+        Will use a limited set of English letters (without vowels, to prevent profanity), and numbers. Any easily-mistakable characters are also removed (e.g. `0Oo`).
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    -BASE64 [<SwitchParameter>]
+        Uses the BASE64 character-set (`ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=`) for the returning string.
+        Will use the standard Base-64 characters (`A-Za-z0-9+/=`).
+        This parameter is optional.
+
+        Required?                    false
+        Position?                    named
+        Default value                False
+        Accept pipeline input?       false
+        Accept wildcard characters?  false
+
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216).
+
+INPUTS
+
+OUTPUTS
+    [string] A randomized ID string.
+
+
+    -------------------------- EXAMPLE 1 --------------------------
+
+    PS>.\nanoid
+
+    GDNUzAm2kvi32dJurl7pT
+
+
+
+
+    -------------------------- EXAMPLE 2 --------------------------
+
+    PS>.\nanoid -size 21
+
+    xRL8PNiL9k1EfRtaT7Ffv
+
+
+
+
+    -------------------------- EXAMPLE 3 --------------------------
+
+    PS>.\nanoid -size 21 -NO_LOOK_ALIKES_SAFE
+
+    CKFKPLmMnHmJD6pLCjLgh
+
+
+
+
+    -------------------------- EXAMPLE 4 --------------------------
+
+    PS>$nid = .\nanoid -size 11 -dict "A2Z_SAFE"
+
+    22qDccZzvPT
+
+
+
+
+    -------------------------- EXAMPLE 5 --------------------------
+
+    PS>.\nanoid -size 11 -alphabet "qwerty"
+
+    rerqrqreweq
+
+
+
+
+
+RELATED LINKS
+    https://github.com/ai/nanoid
 ```
-
-Test configuration: Framework 13 7840U, Fedora 39, Node.js 21.6.
-
-
-## Security
-
-*See a good article about random generators theory:
-[Secure random values (in Node.js)]*
-
-* **Unpredictability.** Instead of using the unsafe `Math.random()`, Nano ID
-  uses the `crypto` module in Node.js and the Web Crypto API in browsers.
-  These modules use unpredictable hardware random generator.
-* **Uniformity.** `random % alphabet` is a popular mistake to make when coding
-  an ID generator. The distribution will not be even; there will be a lower
-  chance for some symbols to appear compared to others. So, it will reduce
-  the number of tries when brute-forcing. Nano ID uses a [better algorithm]
-  and is tested for uniformity.
-
-  <img src="img/distribution.png" alt="Nano ID uniformity"
-     width="340" height="135">
-
-* **Well-documented:** all Nano ID hacks are documented. See comments
-  in [the source].
-* **Vulnerabilities:** to report a security vulnerability, please use
-  the [Tidelift security contact](https://tidelift.com/security).
-  Tidelift will coordinate the fix and disclosure.
-
-[Secure random values (in Node.js)]: https://gist.github.com/joepie91/7105003c3b26e65efcea63f3db82dfba
-[better algorithm]:                  https://github.com/ai/nanoid/blob/main/index.js
-[the source]:                        https://github.com/ai/nanoid/blob/main/index.js
-
-
-## Install
-
-```bash
-npm install nanoid
-```
-
-Nano ID 5 works only with ESM projects, in tests or Node.js scripts.
-For CommonJS you need to use latest Node.js 20 or 22
-with `--experimental-require-module`:
-
-```bash
-node --experimental-require-module app.js
-```
-
-Or you can use Nano ID 3.x (we still support it):
-
-```bash
-npm install nanoid@3
-```
-
-For quick hacks, you can load Nano ID from CDN. Though, it is not recommended
-to be used in production because of the lower loading performance.
-
-```js
-import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js'
-```
-
-
-## API
-
-Nano ID has 2 APIs: normal and non-secure.
-
-By default, Nano ID uses URL-friendly symbols (`A-Za-z0-9_-`) and returns an ID
-with 21 characters (to have a collision probability similar to UUID v4).
-
-
-### Blocking
-
-The safe and easiest way to use Nano ID.
-
-In rare cases could block CPU from other work while noise collection
-for hardware random generator.
-
-```js
-import { nanoid } from 'nanoid'
-model.id = nanoid() //=> "V1StGXR8_Z5jdHi6B-myT"
-```
-
-If you want to reduce the ID size (and increase collisions probability),
-you can pass the size as an argument.
-
-```js
-nanoid(10) //=> "IRFa-VaY2b"
-```
-
-Don’t forget to check the safety of your ID size
-in our [ID collision probability] calculator.
-
-You can also use a [custom alphabet](#custom-alphabet-or-size)
-or a [random generator](#custom-random-bytes-generator).
-
-[ID collision probability]: https://zelark.github.io/nano-id-cc/
-
-
-### Non-Secure
-
-By default, Nano ID uses hardware random bytes generation for security
-and low collision probability. If you are not so concerned with security,
-you can use it for environments without hardware random generators.
-
-```js
-import { nanoid } from 'nanoid/non-secure'
-const id = nanoid() //=> "Uakgb_J5m9g-0JDMbcJqLJ"
-```
-
-
-### Custom Alphabet or Size
-
-`customAlphabet` returns a function that allows you to create `nanoid`
-with your own alphabet and ID size.
-
-```js
-import { customAlphabet } from 'nanoid'
-const nanoid = customAlphabet('1234567890abcdef', 10)
-model.id = nanoid() //=> "4f90d13a42"
-```
-
-```js
-import { customAlphabet } from 'nanoid/non-secure'
-const nanoid = customAlphabet('1234567890abcdef', 10)
-user.id = nanoid()
-```
-
-Check the safety of your custom alphabet and ID size in our
-[ID collision probability] calculator. For more alphabets, check out the options
-in [`nanoid-dictionary`].
-
-Alphabet must contain 256 symbols or less.
-Otherwise, the security of the internal generator algorithm is not guaranteed.
-
-In addition to setting a default size, you can change the ID size when calling
-the function:
-
-```js
-import { customAlphabet } from 'nanoid'
-const nanoid = customAlphabet('1234567890abcdef', 10)
-model.id = nanoid(5) //=> "f01a2"
-```
-
-[ID collision probability]: https://alex7kom.github.io/nano-nanoid-cc/
-[`nanoid-dictionary`]:      https://github.com/CyberAP/nanoid-dictionary
-
-
-### Custom Random Bytes Generator
-
-`customRandom` allows you to create a `nanoid` and replace alphabet
-and the default random bytes generator.
-
-In this example, a seed-based generator is used:
-
-```js
-import { customRandom } from 'nanoid'
-
-const rng = seedrandom(seed)
-const nanoid = customRandom('abcdef', 10, size => {
-  return (new Uint8Array(size)).map(() => 256 * rng())
-})
-
-nanoid() //=> "fbaefaadeb"
-```
-
-`random` callback must accept the array size and return an array
-with random numbers.
-
-If you want to use the same URL-friendly symbols with `customRandom`,
-you can get the default alphabet using the `urlAlphabet`.
-
-```js
-const { customRandom, urlAlphabet } = require('nanoid')
-const nanoid = customRandom(urlAlphabet, 10, random)
-```
-
-Note, that between Nano ID versions we may change random generator
-call sequence. If you are using seed-based generators, we do not guarantee
-the same result.
-
-
-## Usage
-
-### React
-
-There’s no correct way to use Nano ID for React `key` prop
-since it should be consistent among renders.
-
-```jsx
-function Todos({todos}) {
-  return (
-    <ul>
-      {todos.map(todo => (
-        <li key={nanoid()}> /* DON’T DO IT */
-          {todo.text}
-        </li>
-      ))}
-    </ul>
-  )
-}
-```
-
-You should rather try to reach for stable ID inside your list item.
-
-```jsx
-const todoItems = todos.map((todo) =>
-  <li key={todo.id}>
-    {todo.text}
-  </li>
-)
-```
-
-In case you don’t have stable IDs you'd rather use index as `key`
-instead of `nanoid()`:
-
-```jsx
-const todoItems = todos.map((text, index) =>
-  <li key={index}> /* Still not recommended but preferred over nanoid().
-                      Only do this if items have no stable IDs. */
-    {text}
-  </li>
-)
-```
-
-In case you just need random IDs to link elements like labels
-and input fields together, [`useId`] is recommended.
-That hook was added in React 18.
-
-[`useId`]: https://reactjs.org/docs/hooks-reference.html#useid
-
-
-### React Native
-
-React Native does not have built-in random generator. The following polyfill
-works for plain React Native and Expo starting with `39.x`.
-
-1. Check [`react-native-get-random-values`] docs and install it.
-2. Import it before Nano ID.
-
-```js
-import 'react-native-get-random-values'
-import { nanoid } from 'nanoid'
-```
-
-[`react-native-get-random-values`]: https://github.com/LinusU/react-native-get-random-values
-
-
-### PouchDB and CouchDB
-
-In PouchDB and CouchDB, IDs can’t start with an underscore `_`.
-A prefix is required to prevent this issue, as Nano ID might use a `_`
-at the start of the ID by default.
-
-Override the default ID with the following option:
-
-```js
-db.put({
-  _id: 'id' + nanoid(),
-  …
-})
-```
-
-
-### Web Workers
-
-Web Workers do not have access to a secure random generator.
-
-Security is important in IDs when IDs should be unpredictable.
-For instance, in "access by URL" link generation.
-If you do not need unpredictable IDs, but you need to use Web Workers,
-you can use the non‑secure ID generator.
-
-```js
-import { nanoid } from 'nanoid/non-secure'
-nanoid() //=> "Uakgb_J5m9g-0JDMbcJqLJ"
-```
-
-Note: non-secure IDs are more prone to collision attacks.
-
-
-### CLI
-
-You can get unique ID in terminal by calling `npx nanoid`. You need only
-Node.js in the system. You do not need Nano ID to be installed anywhere.
-
-```sh
-$ npx nanoid
-npx: installed 1 in 0.63s
-LZfXLFzPPR4NNrgjlWDxn
-```
-
-Size of generated ID can be specified with `--size` (or `-s`) option:
-
-```sh
-$ npx nanoid --size 10
-L3til0JS4z
-```
-
-Custom alphabet can be specified with `--alphabet` (or `-a`) option
-(note that in this case `--size` is required):
-
-```sh
-$ npx nanoid --alphabet abc --size 15
-bccbcabaabaccab
-```
-
-
-### Other Programming Languages
-
-Nano ID was ported to many languages. You can use these ports to have
-the same ID generator on the client and server side.
-
-* [C#](https://github.com/codeyu/nanoid-net)
-* [C++](https://github.com/mcmikecreations/nanoid_cpp)
-* [Clojure and ClojureScript](https://github.com/zelark/nano-id)
-* [ColdFusion/CFML](https://github.com/JamoCA/cfml-nanoid)
-* [Crystal](https://github.com/mamantoha/nanoid.cr)
-* [Dart & Flutter](https://github.com/pd4d10/nanoid-dart)
-* [Deno](https://github.com/ianfabs/nanoid)
-* [Elixir](https://github.com/railsmechanic/nanoid)
-* [Go](https://github.com/matoous/go-nanoid)
-* [Haskell](https://github.com/MichelBoucey/NanoID)
-* [Haxe](https://github.com/flashultra/uuid)
-* [Janet](https://sr.ht/~statianzo/janet-nanoid/)
-* [Java](https://github.com/Soundicly/jnanoid-enhanced)
-* [Kotlin](https://github.com/viascom/nanoid-kotlin)
-* [MySQL/MariaDB](https://github.com/viascom/nanoid-mysql-mariadb)
-* [Nim](https://github.com/icyphox/nanoid.nim)
-* [OCaml](https://github.com/routineco/ocaml-nanoid)
-* [Perl](https://github.com/tkzwtks/Nanoid-perl)
-* [PHP](https://github.com/hidehalo/nanoid-php)
-* Python [native](https://github.com/puyuan/py-nanoid) implementation
-  with [dictionaries](https://pypi.org/project/nanoid-dictionary)
-  and [fast](https://github.com/oliverlambson/fastnanoid) implementation (written in Rust)
-* Postgres [Extension](https://github.com/spa5k/uids-postgres)
-  and [Native Function](https://github.com/viascom/nanoid-postgres)
-* [R](https://github.com/hrbrmstr/nanoid) (with dictionaries)
-* [Ruby](https://github.com/radeno/nanoid.rb)
-* [Rust](https://github.com/nikolay-govorov/nanoid)
-* [Swift](https://github.com/antiflasher/NanoID)
-* [Unison](https://share.unison-lang.org/latest/namespaces/hojberg/nanoid)
-* [V](https://github.com/invipal/nanoid)
-* [Zig](https://github.com/SasLuca/zig-nanoid)
-
-For other environments, [CLI] is available to generate IDs from a command line.
-
-[CLI]: #cli
-
-
-## Tools
-
-* [ID size calculator] shows collision probability when adjusting
-  the ID alphabet or size.
-* [`nanoid-dictionary`] with popular alphabets to use with [`customAlphabet`].
-* [`nanoid-good`] to be sure that your ID doesn’t contain any obscene words.
-
-[`nanoid-dictionary`]: https://github.com/CyberAP/nanoid-dictionary
-[ID size calculator]:  https://zelark.github.io/nano-id-cc/
-[`customAlphabet`]:    #custom-alphabet-or-size
-[`nanoid-good`]:       https://github.com/y-gagar1n/nanoid-good
